@@ -7,10 +7,16 @@ import { ToastContainer, toast } from "react-toastify";
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
+    updateProfile,
 } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
 
 const Login = () => {
     const [isSignInForm, setIsSignInForm] = useState(true);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const toggleSignInForm = () => {
         setIsSignInForm(!isSignInForm);
@@ -50,6 +56,7 @@ const Login = () => {
                         .then((userCredential) => {
                             // Signed in
                             const user = userCredential.user;
+                            navigate("/browse");
                             toast.success("Login Sucess!!");
                         })
                         .catch((error) => {
@@ -69,7 +76,32 @@ const Login = () => {
                         .then((userCredential) => {
                             // Signed up
                             const user = userCredential.user;
+                            toggleSignInForm();
                             toast.success("User Registered!!");
+                            updateProfile(user, {
+                                displayName: values.name,
+                                photoURL:
+                                    "https://s3.amazonaws.com/media.mixrank.com/profilepic/6a0677e8e96931adae02f2d9f890bba8",
+                            })
+                                .then(() => {
+                                    const {
+                                        uid,
+                                        email,
+                                        displayName,
+                                        photoURL,
+                                    } = auth.currentUser;
+                                    dispatch(
+                                        addUser({
+                                            uid: uid,
+                                            email: email,
+                                            displayName: displayName,
+                                            photoURL: photoURL,
+                                        }),
+                                    );
+                                })
+                                .catch((error) => {
+                                    toast.error(error);
+                                });
                         })
                         .catch((error) => {
                             const errorCode = error.code;
