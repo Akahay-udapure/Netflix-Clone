@@ -12,6 +12,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { BG_IMG } from "../utils/constant";
 
 const Login = () => {
     const [isSignInForm, setIsSignInForm] = useState(true);
@@ -54,13 +55,11 @@ const Login = () => {
                         values.password,
                     )
                         .then((userCredential) => {
-                            // Signed in
                             const user = userCredential.user;
                             navigate("/browse");
                             toast.success("Login Sucess!!");
                         })
                         .catch((error) => {
-                            console.log("errror", error.code, error.message);
                             const errorMessage =
                                 error.code == "auth/invalid-credential"
                                     ? "Please Enter Valid Credentials"
@@ -120,10 +119,7 @@ const Login = () => {
         <div>
             <Header />
             <div className="absolute">
-                <img
-                    src="https://assets.nflxext.com/ffe/siteui/vlv3/ca6a7616-0acb-4bc5-be25-c4deef0419a7/c5af601a-6657-4531-8f82-22e629a3795e/IN-en-20231211-popsignuptwoweeks-perspective_alpha_website_large.jpg"
-                    alt=""
-                />
+                <img className="w-full" src={BG_IMG} alt="" />
             </div>
             <form
                 onSubmit={formik.handleSubmit}

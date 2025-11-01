@@ -4,11 +4,19 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { removeUser } from "../utils/userSlice";
 import { toast } from "react-toastify";
+import {
+    NETFLIX_LOGO,
+    SUPPORTED_LANGAUGE,
+    USER_AVATAR,
+} from "../utils/constant";
+import { changeLangauge } from "../utils/configSlice";
+import { toggleGPTSearchView } from "../utils/gptSlice";
 
 const Header = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector((store) => store.user);
+    const showGPTSearch = useSelector((store) => store.gpt.showGPTSearch);
 
     const handleSignOut = () => {
         signOut(auth)
@@ -20,31 +28,69 @@ const Header = () => {
                 toast.error(error);
             });
     };
+
+    const handleGPTSearchClick = () => {
+        dispatch(toggleGPTSearchView());
+    };
+
+    const handleOnLangaugeChange = (e) => {
+        dispatch(changeLangauge(e.target.value));
+    };
     return (
         <div className="absolute z-10 w-screen px-8 bg-linear-to-b from-black flex justify-between">
-            <img
-                className="w-60 h-30 px-8 py-4"
-                src="https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png"
-                alt=""
-            />
-            {user && (
-                <div className="flex p-8">
+            <ul className="flex items-center">
+                <li>
                     <img
-                        className={`w-12 h-12 ${
-                            user?.photoURL ? "rounded-3xl" : ""
-                        }`}
-                        src={
-                            user?.photoURL ||
-                            "https://occ-0-6247-2164.1.nflxso.net/dnm/api/v6/K6hjPJd6cR6FpVELC5Pd6ovHRSk/AAAABdpkabKqQAxyWzo6QW_ZnPz1IZLqlmNfK-t4L1VIeV1DY00JhLo_LMVFp936keDxj-V5UELAVJrU--iUUY2MaDxQSSO-0qw.png?r=e6e"
-                        }
-                        alt=""
+                        className="w-20 md:w-44"
+                        src={NETFLIX_LOGO}
+                        alt="Netflix Logo"
                     />
-                    <button
-                        className="text-white mx-2 font-bold cursor-pointer"
-                        onClick={handleSignOut}>
-                        Sign Out
-                    </button>
-                </div>
+                </li>
+                <li className="text-brand-light-gray font-semibold cursor-pointer mx-3 my-1 text-white transition-colors">
+                    Home
+                </li>
+                <li className="text-brand-light-gray font-semibold cursor-pointer mx-3 my-1 text-white transition-colors">
+                    TV Shows
+                </li>
+                <li className="text-brand-light-gray font-semibold cursor-pointer mx-3 my-1 text-white transition-colors">
+                    Movies
+                </li>
+            </ul>
+            {/* <img className="w-60 h-30 px-8 py-4" src={NETFLIX_LOGO} alt="" /> */}
+            {user && (
+                <ul className="flex items-center p-1">
+                    {showGPTSearch && (
+                        <li className="mx-2">
+                            <select
+                                className="cursor-pointer py-1.5 px-3 md:px-3 text-sm bg-pink-700 text-white font-semibold rounded-md transition-all duration-200 shadow-sm hover:shadow-md"
+                                onChange={handleOnLangaugeChange}>
+                                {SUPPORTED_LANGAUGE.map((lang) => (
+                                    <option
+                                        className="font-bold"
+                                        key={lang.identifier}
+                                        value={lang.identifier}>
+                                        {lang.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </li>
+                    )}
+                    <li className="mx-2">
+                        <button
+                            className="cursor-pointer py-1.5 px-3 md:px-3 text-sm bg-purple-700 text-white font-semibold rounded-md hover:bg-purple-600 transition-all duration-200 shadow-sm hover:shadow-md"
+                            onClick={handleGPTSearchClick}>
+                            GPT Search
+                        </button>
+                    </li>
+                    <li className="mx-2 flex">
+                        <img className="w-12 h-12" src={USER_AVATAR} alt="" />
+                        <button
+                            className="text-white ml-2 font-bold cursor-pointer"
+                            onClick={handleSignOut}>
+                            Sign Out
+                        </button>
+                    </li>
+                </ul>
             )}
         </div>
     );

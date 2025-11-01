@@ -1,2 +1,34 @@
 @import "tailwindcss";
 @import "react-toastify/dist/ReactToastify.css";
+/* Add to your tailwind.css or global CSS */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* Netflix-like hover effects */
+.netflix-card-hover {
+    transition: all 0.3s ease;
+}
+
+.netflix-card-hover:hover {
+    transform: scale(1.1);
+    z-index: 30;
+}
+
+/* Background pattern */
+.bg-netflix-pattern {
+    background-image: radial-gradient(
+            circle at 20% 50%,
+            rgba(25, 25, 25, 0.8) 0%,
+            transparent 50%
+        ),
+        radial-gradient(
+            circle at 80% 20%,
+            rgba(25, 25, 25, 0.6) 0%,
+            transparent 50%
+        );
+}
