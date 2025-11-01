@@ -36,6 +36,10 @@ const Header = () => {
     const handleOnLangaugeChange = (e) => {
         dispatch(changeLangauge(e.target.value));
     };
+
+    const homePage = () => {
+        if (showGPTSearch) dispatch(toggleGPTSearchView());
+    };
     return (
         <div className="absolute z-10 w-screen px-8 bg-linear-to-b from-black flex justify-between">
             <ul className="flex items-center">
@@ -46,7 +50,9 @@ const Header = () => {
                         alt="Netflix Logo"
                     />
                 </li>
-                <li className="text-brand-light-gray font-semibold cursor-pointer mx-3 my-1 text-white transition-colors">
+                <li
+                    onClick={homePage}
+                    className="text-brand-light-gray font-semibold cursor-pointer mx-3 my-1 text-white transition-colors">
                     Home
                 </li>
                 <li className="text-brand-light-gray font-semibold cursor-pointer mx-3 my-1 text-white transition-colors">
